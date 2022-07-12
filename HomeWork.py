@@ -21,6 +21,9 @@ class Student:
         else:
             return 'Ошибка'
 
+    def __str__(self):
+        pass
+
 class Mentor:
     def __init__(self, name, surname):
         self.name = name
@@ -31,6 +34,20 @@ class Lecturer(Mentor):
     grades = {}
     grade_options = (1,2,3,4,5,6,7,8,9,10)
 
+    def avg_grade(self):
+        grades_sum = 0
+        grades_count = 0
+        for grades in self.grades.values():
+            grades_sum += sum(grades)
+            grades_count += len(grades)
+        return(grades_sum / grades_count)
+
+    def __str__(self):
+        return(f'Имя: {self.name}\nФамилия: {self:surname}\nСредняя оценка за лекции: {self.avg_grade()}')
+
+
+
+
 class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
         if isinstance(student, Student) and course in self.courses_attached and course in student.courses_in_progress:
@@ -40,43 +57,29 @@ class Reviewer(Mentor):
                 student.grades[course] = [grade]
         else:
             return 'Ошибка'
+    def __str__(self):
+        return (f'Имя: {self.name} \nФамилия: {self.surname}')
 
 
 
 st = Student('Alan','Berns','male')
 rev = Reviewer('Bob','Smith')
-st.courses_in_progress += ['course1']
-rev.courses_attached += ['course1']
-print (st.courses_in_progress)
-rev.rate_hw(st,'course1','A')
-print (st.grades)
 lect = Lecturer('Sam', 'Fisher')
-lect.courses_attached = 'course1'
-st.rate_lecturer(lect, 'course1',1)
-print (lect.grades)
 
-# best_student = Student('Ruoy', 'Eman', 'your_gender')
-# best_student.courses_in_progress += ['Python']
-#
-# cool_mentor = Mentor('Some', 'Buddy')
-# cool_mentor.courses_attached += ['Python']
-#
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-# cool_mentor.rate_hw(best_student, 'Python', 10)
-#
-# print(best_student.grades)
-#
-# best_student = Student('Ruoy', 'Eman', 'your_gender')
-# best_student.finished_courses += ['Git']
-# best_student.courses_in_progress += ['Python']
-# best_student.grades['Git'] = [10, 10, 10, 10, 10]
-# best_student.grades['Python'] = [10, 10]
-#
-# print(best_student.finished_courses)
-# print(best_student.courses_in_progress)
-# print(best_student.grades)
-#
-# cool_mentor = Mentor('Some', 'Buddy')
-# cool_mentor.courses_attached += ['Python']
-# print(cool_mentor.courses_attached)
+st.courses_in_progress.append('course1')
+st.courses_in_progress.append('course2')
+rev.courses_attached.append('course1')
+rev.courses_attached.append('course2')
+lect.courses_attached.append('course1')
+lect.courses_attached.append('course2')
+rev.rate_hw(st, 'course1', 'A')
+rev.rate_hw(st, 'course2', 'B')
+st.rate_lecturer(lect, 'course1', 1)
+st.rate_lecturer(lect, 'course1', 3)
+st.rate_lecturer(lect, 'course2', 5)
+
+print(st.grades)
+print(st.courses_in_progress)
+print(lect.grades)
+print(rev)
+print(lect)
