@@ -1,10 +1,16 @@
-
+def avg_grade(grades):
+    grades_sum = 0
+    grades_count = 0
+    for grades_list in grades.values():
+        grades_sum += sum(grades_list)
+        grades_count += len(grades_list)
+    return(grades_sum / grades_count)
 
 class Student:
     def __init__(self, name, surname, gender ):
-        self.name = ''
-        self.surname = ''
-        self.gender = ''
+        self.name = name
+        self.surname = surname
+        self.gender = gender
         self.finished_courses = []
         self.courses_in_progress = []
         self.grades = {}
@@ -22,7 +28,12 @@ class Student:
             return 'Ошибка'
 
     def __str__(self):
-        pass
+        # print(f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание:{avg_grade(self.grades)}')
+        # print(*self.courses_in_progress,', ')
+
+        student_to_print = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание:{avg_grade(self.grades)}\
+        \nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершённые курсы: {", ".join(self.finished_courses)}'
+        return(student_to_print)
 
 class Mentor:
     def __init__(self, name, surname):
@@ -33,19 +44,9 @@ class Mentor:
 class Lecturer(Mentor):
     grades = {}
     grade_options = (1,2,3,4,5,6,7,8,9,10)
-
-    def avg_grade(self):
-        grades_sum = 0
-        grades_count = 0
-        for grades in self.grades.values():
-            grades_sum += sum(grades)
-            grades_count += len(grades)
-        return(grades_sum / grades_count)
-
     def __str__(self):
-        return(f'Имя: {self.name}\nФамилия: {self:surname}\nСредняя оценка за лекции: {self.avg_grade()}')
-
-
+        lecturer_to_print= f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {avg_grade(self.grades)}'
+        return(lecturer_to_print)
 
 
 class Reviewer(Mentor):
@@ -68,12 +69,13 @@ lect = Lecturer('Sam', 'Fisher')
 
 st.courses_in_progress.append('course1')
 st.courses_in_progress.append('course2')
+st.finished_courses.append('A')
 rev.courses_attached.append('course1')
 rev.courses_attached.append('course2')
 lect.courses_attached.append('course1')
 lect.courses_attached.append('course2')
-rev.rate_hw(st, 'course1', 'A')
-rev.rate_hw(st, 'course2', 'B')
+rev.rate_hw(st, 'course1', 1)
+rev.rate_hw(st, 'course2', 4)
 st.rate_lecturer(lect, 'course1', 1)
 st.rate_lecturer(lect, 'course1', 3)
 st.rate_lecturer(lect, 'course2', 5)
@@ -82,4 +84,7 @@ print(st.grades)
 print(st.courses_in_progress)
 print(lect.grades)
 print(rev)
-print(lect)
+
+print( avg_grade(lect.grades))
+print (lect)
+print (st)
