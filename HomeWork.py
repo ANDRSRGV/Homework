@@ -42,9 +42,9 @@ class Mentor:
         self.name = name
         self.surname = surname
         self.courses_attached = []
+        self.grades = {}
 
 class Lecturer(Mentor):
-    grades = {}
     grade_options = (1,2,3,4,5,6,7,8,9,10)
     def avg_grade(self):
         return (avg_grade(self.grades))
@@ -71,35 +71,63 @@ class Reviewer(Mentor):
 
 
 
-st = Student('Alan','Berns','male')
-rev = Reviewer('Bob','Smith')
-lect = Lecturer('Sam', 'Fisher')
+st1 = Student('Alan','Berns','male')
+st2 = Student('Bob', 'Marley','male')
+rev1 = Reviewer('Bob','Smith')
+rev2 = Reviewer('Tom','Log')
+lect1 = Lecturer('Sam', 'Fisher')
+lect2 = Lecturer('Tim', 'Dalton')
 
-st.courses_in_progress.append('course1')
-st.courses_in_progress.append('course2')
-st.finished_courses.append('A')
-rev.courses_attached.append('course1')
-rev.courses_attached.append('course2')
-lect.courses_attached.append('course1')
-lect.courses_attached.append('course2')
-rev.rate_hw(st, 'course1', 1)
-rev.rate_hw(st, 'course2', 4)
-st.rate_lecturer(lect, 'course1', 1)
-st.rate_lecturer(lect, 'course1', 3)
-st.rate_lecturer(lect, 'course2', 5)
+st1.courses_in_progress.append('course2')
+st1.courses_in_progress.append('course3')
+st1.finished_courses.append('Course1')
+st2.courses_in_progress.append('course2')
+rev1.courses_attached.append('course2')
+rev2.courses_attached.append('course2')
+rev2.courses_attached.append('course3')
+lect1.courses_attached.append('course2')
+lect1.courses_attached.append('course3')
+lect2.courses_attached.append('course2')
+rev1.rate_hw(st1, 'course2', 1)
+rev2.rate_hw(st1, 'course2', 4)
+rev1.rate_hw(st1, 'course3', 2)
+rev2.rate_hw(st1, 'course3', 10)
+rev1.rate_hw(st2, 'course2', 3)
+rev2.rate_hw(st2, 'course2', 1)
+st1.rate_lecturer(lect1, 'course2', 5)
+st1.rate_lecturer(lect1, 'course3', 6)
+st1.rate_lecturer(lect2, 'course2', 10)
+st1.rate_lecturer(lect2, 'course3', 9)
+st2.rate_lecturer(lect1, 'course2', 8)
+st2.rate_lecturer(lect1, 'course3', 9)
+print(f'Студент 1\n', st1)
+print(f'Студент 2\n', st2)
+print('Студент 1 успевает лучше студента 2:', st1>st2)
 
-print(st.grades)
-print(st.courses_in_progress)
-print(lect.grades)
-print(rev)
+print(f'Лектор 1\n',lect1)
+print(f'Лектор 2\n',lect2)
+print('Лектор 1 более популярный, чем лектор 2:', lect1>lect2)
 
-print( avg_grade(lect.grades))
-print (lect)
-print (st)
+def avg_course_grade(students, course_name):
+    grades_sum = 0
+    grades_num = 0
+    for st in students:
+        if isinstance(st, Student):
+          course_grades = st.grades[course_name]
+          grades_sum += sum(course_grades)
+          grades_num += len(course_grades)
+    print(f'Средняя оценка студентов за курс \"{course_name}\": {grades_sum/grades_num}')
 
-st1 = Student('Bob', 'Marley','male')
-st1.courses_in_progress.append('Good course')
-rev.courses_attached.append('Good course')
-rev.rate_hw(st1,'Good course',2)
-rev.rate_hw(st1,'Good course',4)
-print(st1>st)
+avg_course_grade([st1,st2],'course2')
+
+def avg_lecturer_grade(lecturers, course_name):
+    grades_sum = 0
+    grades_num = 0
+    for lec in lecturers:
+        if isinstance(lec, Lecturer):
+          course_grades = lec.grades[course_name]
+          grades_sum += sum(course_grades)
+          grades_num += len(course_grades)
+    print(f'Средняя оценка лекторов за курс \"{course_name}\": {grades_sum/grades_num}')
+
+avg_lecturer_grade([lect1, lect2], 'course2')
