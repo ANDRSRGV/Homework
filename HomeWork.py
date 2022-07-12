@@ -19,19 +19,21 @@ class Student:
     def rate_lecturer(self, lecturer, course, grade):
         if isinstance(lecturer, Lecturer) and course in lecturer.courses_attached and course in self.courses_in_progress\
         and grade in lecturer.grade_options:
-            print (123)
             if course in lecturer.grades:
                 lecturer.grades[course] += [grade]
             else:
                 lecturer.grades[course] = [grade]
         else:
             return 'Ошибка'
-
+    def avg_grade(self):
+        return (avg_grade(self.grades))
+    def __lt__(self, std):
+        if self.avg_grade() < std.avg_grade():
+            return(True)
+        else:
+            return(False)
     def __str__(self):
-        # print(f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание:{avg_grade(self.grades)}')
-        # print(*self.courses_in_progress,', ')
-
-        student_to_print = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание:{avg_grade(self.grades)}\
+        student_to_print = f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за домашнее задание:{self.avg_grade()}\
         \nКурсы в процессе изучения: {", ".join(self.courses_in_progress)}\nЗавершённые курсы: {", ".join(self.finished_courses)}'
         return(student_to_print)
 
@@ -44,10 +46,16 @@ class Mentor:
 class Lecturer(Mentor):
     grades = {}
     grade_options = (1,2,3,4,5,6,7,8,9,10)
+    def avg_grade(self):
+        return (avg_grade(self.grades))
     def __str__(self):
-        lecturer_to_print= f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {avg_grade(self.grades)}'
+        lecturer_to_print= f'Имя: {self.name}\nФамилия: {self.surname}\nСредняя оценка за лекции: {self.avg_grade()}'
         return(lecturer_to_print)
-
+    def __lt__(self, lec):
+        if self.avg_grade() < lec.avg_grade():
+            return(True)
+        else:
+            return(False)
 
 class Reviewer(Mentor):
     def rate_hw(self, student, course, grade):
@@ -88,3 +96,10 @@ print(rev)
 print( avg_grade(lect.grades))
 print (lect)
 print (st)
+
+st1 = Student('Bob', 'Marley','male')
+st1.courses_in_progress.append('Good course')
+rev.courses_attached.append('Good course')
+rev.rate_hw(st1,'Good course',2)
+rev.rate_hw(st1,'Good course',4)
+print(st1>st)
